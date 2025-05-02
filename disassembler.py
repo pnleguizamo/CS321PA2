@@ -99,6 +99,7 @@ def disassemble_cb_type(binary_instruction):
     opcode = (binary_instruction >> 24) & 0xFF  # Extract opcode bits
     rd = (binary_instruction >> 0) & 0x1F
     BR_address = (binary_instruction >> 5) & 0x7FFFF  # Extract the address bits
+    BR_address = twos_comp(BR_address, 19)  
 
     return f"CBZ X{rd}, {BR_address}" if opcode == 0b10110100 else f"CBNZ X{rd}, {BR_address}"
 
