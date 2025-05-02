@@ -118,7 +118,7 @@ def disassemble_r_type(binary_instruction):
         shamt = (binary_instruction >> 10) & 0x3F
         return f"LSR X{rd}, X{rn}, #{shamt}"
     
-    if opcode == 0x6B0: # PRNT instruction
+    if opcode == 0x6B0: # BR instruction
         return f"BR X{rn}"
     
     if opcode == 0x7FD: # PRNT instruction
