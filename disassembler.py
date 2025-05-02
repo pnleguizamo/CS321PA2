@@ -4,6 +4,7 @@ import math
 rMap = dict()
 rMap[0x458] = "ADD"
 rMap[0x450] = "AND"
+rMap[0x6B0] = "BR"
 rMap[0x650] = "EOR"
 rMap[0x69B] = "LSL"
 rMap[0x69A] = "LSR"
@@ -117,6 +118,9 @@ def disassemble_r_type(binary_instruction):
         shamt = (binary_instruction >> 10) & 0x3F
         return f"LSR X{rd}, X{rn}, #{shamt}"
     
+    if opcode == 0x6B0: # PRNT instruction
+        return f"BR X{rn}"
+    
     if opcode == 0x7FD: # PRNT instruction
         return f"PRNT X{rd}"
     
@@ -187,9 +191,10 @@ labels = []
 for i, line in enumerate(lines):
     words = line.split(" ")
     if words[0][0] == "B":
-        offset = int(words[1])
-        lines[i] = f"{words[0]} label{i + offset}"
-        labels.append(i+offset)
+        if not(len(words[0]) > 1 and words[0][1] == "R"): # if not BR
+            offset = int(words[1])
+            lines[i] = f"{words[0]} label{i + offset}"
+            labels.append(i+offset)
 
     if words[0][0] == "C" and words[0][1] == "B":
         offset = int(words[2])
